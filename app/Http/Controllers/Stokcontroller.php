@@ -65,6 +65,18 @@ class StokController extends Controller
     public function destroy($id)
     {
         $stok = StokIkan::findOrFail($id);
+
+        // Periksa apakah stok ikan ini sudah digunakan dalam transaksi (tidak boleh dihapus)
+        if ($stok->transaksis()->exists()) {
+            return redirect()->route('stok.index')->with('error', 'Stok tidak dapat dihapus karena sudah memiliki riwayat transaksi.');
+        }
+
+        // Hapus wishlist yang merujuk ke stok ikan ini
+        $stok->wishlists()->delete();
+
+        // Hapus katalog produk yang merujuk ke stok ikan ini
+        $stok->katalog()->delete();
+
         $stok->delete();
         return redirect()->route('stok.index')->with('success', 'Stok berhasil dihapus!');
     }

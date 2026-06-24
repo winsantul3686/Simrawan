@@ -118,6 +118,10 @@
     font-size: 0.6rem;
     padding: 1px 6px;
     border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 16px;
 }
 
 /* Notif Items */

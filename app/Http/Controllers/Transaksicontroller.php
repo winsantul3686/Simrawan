@@ -18,11 +18,19 @@ class TransaksiController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'status' => 'required|in:Menunggu,Diproses,Dikirim,Selesai,Dibatalkan',
+            'status'             => 'required|in:Menunggu,Diproses,Dikirim,Selesai,Dibatalkan',
+            'status_pembayaran'  => 'nullable|in:Menunggu Konfirmasi,Dikonfirmasi,Ditolak',
         ]);
 
         $transaksi = Transaksi::findOrFail($id);
-        $transaksi->update(['status' => $request->status]);
+        $data = [
+            'status'   => $request->status,
+            'is_read'  => false
+        ];
+        if ($request->has('status_pembayaran')) {
+            $data['status_pembayaran'] = $request->status_pembayaran;
+        }
+        $transaksi->update($data);
 
         return redirect()->route('transaksi.index')->with('success', 'Status pesanan berhasil diperbarui!');
     }

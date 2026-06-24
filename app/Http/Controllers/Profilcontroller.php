@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Admin;
+use App\Models\User;
 
 class ProfilController extends Controller
 {
     public function index()
     {
-        $admin = Admin::findOrFail(session('admin_id'));
+        $admin = User::findOrFail(session('admin_id'));
         return view('profil.index', compact('admin'));
     }
 
@@ -22,7 +22,7 @@ class ProfilController extends Controller
             'alamat'  => 'nullable|string',
         ]);
 
-        $admin = Admin::findOrFail(session('admin_id'));
+        $admin = User::findOrFail(session('admin_id'));
         $admin->update([
             'nama'    => $request->nama,
             'no_telp' => $request->no_telp,
@@ -44,7 +44,7 @@ class ProfilController extends Controller
             'konfirmasi_baru'  => 'required|same:password_baru',
         ]);
 
-        $admin = Admin::findOrFail(session('admin_id'));
+        $admin = User::findOrFail(session('admin_id'));
 
         if ($admin->password !== md5($request->password_lama)) {
             return redirect()->route('profil.index')

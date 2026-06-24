@@ -12,7 +12,7 @@
     <ul class="sidebar-nav">
         <li>
             <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
-                <i class="fas fa-tachometer-alt"></i> Dashboard
+                <i class="fas fa-home"></i> Halaman Utama
             </a>
         </li>
         <li>
@@ -28,16 +28,6 @@
         <li>
             <a href="{{ route('transaksi.index') }}" class="{{ request()->routeIs('transaksi.*') ? 'active' : '' }}">
                 <i class="fas fa-exchange-alt"></i> Transaksi
-            </a>
-        </li>
-    </ul>
-
-    <hr class="sidebar-divider">
-    <span class="sidebar-section">Manajemen</span>
-    <ul class="sidebar-nav">
-        <li>
-            <a href="{{ route('customer.index') }}" class="{{ request()->routeIs('customer.*') ? 'active' : '' }}">
-                <i class="fas fa-users"></i> Customer
             </a>
         </li>
         <li>
@@ -57,7 +47,7 @@
                     $unreadCount = \App\Models\Notifikasi::where('status','belum_dibaca')->count();
                 @endphp
                 @if($unreadCount > 0)
-                    <span style="margin-left:auto;background:var(--danger);color:#fff;font-size:0.6rem;padding:2px 6px;border-radius:10px;">{{ $unreadCount }}</span>
+                    <span style="margin-left:auto;background:var(--danger);color:#fff;font-size:0.6rem;padding:2px 6px;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;min-height:16px;">{{ $unreadCount }}</span>
                 @endif
             </a>
         </li>

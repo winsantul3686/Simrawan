@@ -10,13 +10,14 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // Admin
-        DB::table('admins')->insert([
+        DB::table('users')->insert([
             'nama'       => 'SiMrawan',
             'username'   => 'admin',
             'password'   => md5('admin123'),
             'no_telp'    => '08123456789',
             'email'      => 'SiMrawan@email.com',
             'alamat'     => 'Jl. Raya Jember No. 123, Kecamatan Sumbersari, Kabupaten Jember, Jawa Timur',
+            'role'       => 'admin',
             'created_at' => now(),
             'updated_at' => now(),
         ]);
@@ -37,10 +38,10 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // Customers
-        DB::table('customers')->insert([
-            ['nama' => 'Ucun',   'no_telp' => '08111111111', 'email' => 'ucun@gmail.com',   'alamat' => 'Jember, depan kampus unej gang 10', 'password' => md5('password'), 'created_at' => now(), 'updated_at' => now()],
-            ['nama' => 'Caca',   'no_telp' => '08222222222', 'email' => 'caca@gmail.com',   'alamat' => 'Jember, Jl. Kalimantan No.5',         'password' => md5('password'), 'created_at' => now(), 'updated_at' => now()],
-            ['nama' => 'Cici',   'no_telp' => '08333333333', 'email' => 'cici@gmail.com',   'alamat' => 'Jember, Perumahan Griya Asri Blok A',  'password' => md5('password'), 'created_at' => now(), 'updated_at' => now()],
+        DB::table('users')->insert([
+            ['nama' => 'Ucun',   'no_telp' => '08111111111', 'email' => 'ucun@gmail.com',   'alamat' => 'Jember, depan kampus unej gang 10', 'password' => md5('password'), 'role' => 'customer', 'created_at' => now(), 'updated_at' => now()],
+            ['nama' => 'Caca',   'no_telp' => '08222222222', 'email' => 'caca@gmail.com',   'alamat' => 'Jember, Jl. Kalimantan No.5',         'password' => md5('password'), 'role' => 'customer', 'created_at' => now(), 'updated_at' => now()],
+            ['nama' => 'Cici',   'no_telp' => '08333333333', 'email' => 'cici@gmail.com',   'alamat' => 'Jember, Perumahan Griya Asri Blok A',  'password' => md5('password'), 'role' => 'customer', 'created_at' => now(), 'updated_at' => now()],
         ]);
 
         // Transaksi

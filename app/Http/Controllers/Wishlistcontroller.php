@@ -22,7 +22,10 @@ class WishlistController extends Controller
         ]);
 
         $wishlist = Wishlist::findOrFail($id);
-        $wishlist->update(['status' => $request->status]);
+        $wishlist->update([
+            'status' => $request->status,
+            'is_read' => false
+        ]);
 
         return redirect()->route('wishlist.index')->with('success', 'Status wishlist berhasil diperbarui!');
     }

@@ -1,83 +1,228 @@
 @extends('layouts.app')
 
-@section('title', 'Customer - SiMrawan')
+@section('title', 'Katalog Produk - SiMrawan')
 
-@php $pageTitle = 'Customer'; @endphp
+@php $pageTitle = 'Produk'; @endphp
 
-@section('content')
+@section('styles')
+<style>
+    /* Styling Halaman Beranda Produk Sesuai image_d337ba.png */
+    .beranda-subtext {
+        text-align: center;
+        color: #64748b;
+        font-size: 0.95rem;
+        line-height: 1.5;
+        margin-bottom: 40px;
+    }
+    
+    .katalog-header {
+        margin-bottom: 24px;
+    }
+    
+    .katalog-header h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 2px;
+    }
+    
+    .katalog-header p {
+        font-size: 0.88rem;
+        color: #94a3b8;
+    }
 
-<div class="card">
-    <div class="card-header">
-        <span class="card-title">Daftar Customer</span>
-        <span style="font-size:0.8rem;color:var(--text-muted);">Total: {{ $customerList->count() }} customer</span>
-    </div>
-    <div class="table-wrapper">
-        <table>
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Nama</th>
-                    <th>Email</th>
-                    <th>No. Telp</th>
-                    <th>Alamat</th>
-                    <th>Transaksi</th>
-                    <th>Bergabung</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse($customerList as $i => $c)
-                <tr>
-                    <td>{{ str_pad($i+1, 2, '0', STR_PAD_LEFT) }}</td>
-                    <td style="font-weight:600;">{{ $c->nama }}</td>
-                    <td>{{ $c->email }}</td>
-                    <td>{{ $c->no_telp }}</td>
-                    <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ $c->alamat }}</td>
-                    <td>
-                        <span class="badge badge-info">{{ $c->transaksis_count }} pesanan</span>
-                    </td>
-                    <td>{{ $c->created_at->format('d M Y') }}</td>
-                    <td>
-                        <button class="btn btn-danger btn-sm"
-                            onclick="openDeleteModal({{ $c->id }}, '{{ $c->nama }}')">
-                            <i class="fas fa-trash"></i> Hapus
-                        </button>
-                    </td>
-                </tr>
-                @empty
-                <tr><td colspan="8" style="text-align:center;color:var(--text-muted);padding:30px;">Belum ada customer terdaftar.</td></tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
-</div>
+    /* Container Grid untuk Card Produk */
+    .produk-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 30px;
+        margin-bottom: 40px;
+    }
 
-{{-- Modal Hapus --}}
-<div class="modal-overlay" id="modal-hapus">
-    <div class="modal" style="max-width:380px;text-align:center;">
-        <button class="modal-close" onclick="closeModal('modal-hapus')" style="position:absolute;top:16px;right:16px;">&times;</button>
-        <i class="fas fa-exclamation-triangle" style="font-size:2rem;color:var(--warning);margin:20px 0 10px;display:block;"></i>
-        <p style="font-size:1rem;font-weight:600;margin-bottom:6px;">Hapus Customer?</p>
-        <p id="hapus-nama" style="font-size:0.82rem;color:var(--text-muted);margin-bottom:20px;"></p>
-        <form id="form-hapus" method="POST">
-            @csrf
-            @method('DELETE')
-            <div style="display:flex;gap:12px;justify-content:center;">
-                <button type="submit" class="btn btn-success">Ya, Hapus</button>
-                <button type="button" class="btn btn-danger" onclick="closeModal('modal-hapus')">Batal</button>
-            </div>
-        </form>
-    </div>
-</div>
+    /* Wrapper Card Utama */
+    .card-produk {
+        background: #fff;
+        border-radius: 20px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+        border: 1px solid #f1f5f9;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
 
+    /* Box Gambar Warna Biru Muda Sesuai Gambar Mockup */
+    .card-produk .box-gambar {
+        background: #e0f7fa; /* Warna latar biru muda air */
+        height: 240px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+
+    .card-produk .box-gambar img {
+        width: 130px;
+        height: 130px;
+        object-fit: contain;
+    }
+
+    /* Area Konten Teks */
+    .card-produk .konten-produk {
+        padding: 20px;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .card-produk .nama-ikan {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 2px;
+    }
+
+    .card-produk .ukuran-ikan {
+        font-size: 0.85rem;
+        color: #64748b;
+        margin-bottom: 10px;
+    }
+
+    .card-produk .badge-tersedia {
+        background: #4f46e5;
+        color: #fff;
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 4px 12px;
+        border-radius: 8px;
+        display: inline-block;
+        margin-bottom: 14px;
+        width: fit-content;
+    }
+
+    /* List Detail Nilai Properti */
+    .card-produk .detail-baris {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.88rem;
+        margin-bottom: 6px;
+        color: #64748b;
+    }
+
+    .card-produk .detail-baris .nilai {
+        font-weight: 600;
+        color: #1e293b;
+    }
+
+    .card-produk .detail-baris .nilai-harga {
+        color: #06b6d4; /* Warna cyan/biru terang sesuai mockup */
+        font-weight: 700;
+    }
+
+    .card-produk .deskripsi-singkat {
+        font-size: 0.85rem;
+        color: #94a3b8;
+        border-top: 1px solid #f1f5f9;
+        padding-top: 10px;
+        margin-top: 8px;
+        margin-bottom: 16px;
+    }
+
+    /* Tombol Pesanan Gradasi Ungu-Biru Sesuai image_d337ba.png */
+    .btn-pesan-gradasi {
+        background: linear-gradient(90deg, #0284c7 0%, #6366f1 100%);
+        color: #fff;
+        border: none;
+        padding: 12px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        text-align: center;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+        cursor: pointer;
+        box-shadow: 0 4px 10px rgba(99, 102, 241, 0.2);
+        transition: opacity 0.2s;
+    }
+
+    .btn-pesan-gradasi:hover {
+        opacity: 0.9;
+    }
+</style>
 @endsection
 
-@section('scripts')
-<script>
-function openDeleteModal(id, nama) {
-    document.getElementById('form-hapus').action = '/customer/' + id;
-    document.getElementById('hapus-nama').textContent = 'Customer "' + nama + '" akan dihapus permanen.';
-    openModal('modal-hapus');
-}
-</script>
+@section('content')
+<div style="padding: 10px 24px;">
+
+    <!-- Teks Atas -->
+    <div class="beranda-subtext">
+        Dipanen langsung dari kolam kami dengan standar kualitas terbaik<br>
+        untuk memastikan kesegaran dan nutrisi optimal
+    </div>
+
+    <!-- Header Judul Menu -->
+    <div class="katalog-header">
+        <h2>Katalog Produk</h2>
+        <p>Pilih ikan segar berkualitas</p>
+    </div>
+
+    <!-- Grid Pembungkus Card -->
+    <div class="produk-grid">
+        @forelse($katalogs as $katalog)
+        <div class="card-produk">
+            <!-- Box Gambar Latar Biru Muda -->
+            <div class="box-gambar">
+                @if($katalog->gambar)
+                    <img src="{{ asset('storage/' . $katalog->gambar) }}" alt="Ikan">
+                @else
+                    <!-- Jika gambar kosong, render icon ikan default -->
+                    <img src="https://api.iconify.design/twemoji:fish.svg" alt="Ikan Default">
+                @endif
+            </div>
+
+            <!-- Konten Data Ikan -->
+            <div class="konten-produk">
+                <div class="nama-ikan">{{ $katalog->stokIkan->jenis_ikan ?? 'Nama Ikan' }}</div>
+                <div class="ukuran-ikan">{{ $katalog->stokIkan->ukuran_sortasi ?? 'Ukuran tidak diset' }}</div>
+                
+                <div class="badge-tersedia">Tersedia</div>
+
+                <div class="detail-baris">
+                    <span>Harga</span>
+                    <span class="nilai-harga">Rp {{ number_format($katalog->stokIkan->harga_jual ?? 0, 0, ',', '.') }}/Kg</span>
+                </div>
+                
+                <div class="detail-baris">
+                    <span>Stok</span>
+                    <span class="nilai">{{ $katalog->stokIkan->jumlah_stok ?? 0 }} Kg</span>
+                </div>
+                
+                <div class="detail-baris">
+                    <span>Min Order</span>
+                    <span class="nilai">5/Kg</span>
+                </div>
+
+                <div class="deskripsi-singkat">
+                    {{ $katalog->deskripsi ?? 'Ikan segar pilihan langsung panen.' }}
+                </div>
+
+                <!-- Tombol Pesan mengarah ke Form Checkout Detail (Melalui id rute show) -->
+                <a href="{{ route('customer.produk.show', $katalog->id) }}" class="btn-pesan-gradasi">
+                    <i class="fas fa-shopping-cart"></i> Pesan
+                </a>
+            </div>
+        </div>
+        @empty
+        <div style="grid-column: 1/-1; text-align: center; color: #94a3b8; padding: 40px 0;">
+            <i class="fas fa-fish-sub" style="font-size: 3rem; margin-bottom: 10px; display: block;"></i>
+            Belum ada katalog produk
+        </div>
+        @endforelse
+    </div>
+
+</div>
 @endsection

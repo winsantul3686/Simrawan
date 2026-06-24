@@ -10,7 +10,7 @@
     <div class="card-header">
         <span class="card-title">Daftar Stok Ikan</span>
         <button class="btn btn-primary" onclick="openModal('modal-tambah')">
-            <i class="fas fa-plus"></i> +Tambah Stok
+            <i class="fas fa-plus"></i> Tambah Stok
         </button>
     </div>
 

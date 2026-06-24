@@ -3,12 +3,10 @@
 @section('title', 'Login - SiMrawan')
 
 @section('no-sidebar')
-    {{-- pakai layout tanpa sidebar --}}
 @endsection
 
 @section('content')
 <div class="login-page">
-    {{-- Dekorasi ikan --}}
     <div class="login-deco top-left">🐟</div>
     <div class="login-deco top-right">🐠</div>
     <div class="login-deco bot-left">🐡</div>
@@ -21,7 +19,7 @@
         </div>
 
         <h2>LOGIN</h2>
-        <p class="sub">Masukkan username dan password anda</p>
+        <p class="sub">Masukkan email dan password anda</p>
 
         @if(session('error'))
             <div class="alert alert-error"><i class="fas fa-exclamation-circle"></i> {{ session('error') }}</div>
@@ -33,11 +31,11 @@
         <form action="{{ route('login.post') }}" method="POST">
             @csrf
             <div class="form-group">
-                <label for="username">Username</label>
+                <label for="username">Email / Username</label>
                 <div class="input-icon">
                     <i class="fas fa-user"></i>
                     <input type="text" id="username" name="username"
-                           placeholder="Masukkan username"
+                           placeholder="Email atau username"
                            value="{{ old('username') }}" required>
                 </div>
             </div>

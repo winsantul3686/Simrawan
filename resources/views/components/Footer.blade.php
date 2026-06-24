@@ -20,7 +20,7 @@
                 <ul>
                     <li><a href="{{ route('login') }}">Login</a></li>
                     <li><a href="#">Daftar</a></li>
-                    <li><a href="#">Riwayat Pesanan</a></li>
+                    <li><a href="#">Riwayat Pembelian</a></li>
                     <li><a href="#">Wishlist</a></li>
                 </ul>
             </div>

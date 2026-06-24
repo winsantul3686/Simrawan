@@ -10,12 +10,12 @@ class Transaksi extends Model
     protected $fillable = [
         'no_pesanan', 'customer_id', 'stok_ikan_id', 'ukuran',
         'jumlah', 'total_harga', 'alamat_pengiriman',
-        'bukti_bayar', 'tgl_upload', 'status'
+        'bukti_bayar', 'tgl_upload', 'status', 'status_pembayaran', 'is_read'
     ];
 
     public function customer()
     {
-        return $this->belongsTo(Customer::class, 'customer_id');
+        return $this->belongsTo(User::class, 'customer_id');
     }
 
     public function stokIkan()

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Admin;
+use App\Models\User;
 
 class AuthController extends Controller
 {
@@ -12,33 +12,53 @@ class AuthController extends Controller
         if (session()->has('admin_id')) {
             return redirect()->route('dashboard');
         }
+        if (session()->has('customer_id')) {
+            return redirect()->route('customer.produk');
+        }
         return view('layouts.login');
     }
 
     public function login(Request $request)
     {
-        $username = trim($request->input('username'));
-        $password = $request->input('password');
+        $identifier = trim($request->input('username'));
+        $password   = $request->input('password');
 
-        if (empty($username) || empty($password)) {
-            return back()->with('error', 'Username dan password wajib diisi!')->withInput();
+        if (empty($identifier) || empty($password)) {
+            return back()->with('error', 'Username/email dan password wajib diisi!')->withInput();
         }
 
-        $admin = Admin::where('username', $username)
-                      ->where('password', md5($password))
-                      ->first();
+        // Cek apakah username/email terdaftar di tabel users
+        $user = User::where('email', $identifier)
+                    ->orWhere('username', $identifier)
+                    ->first();
 
-        if (!$admin) {
-            return back()->with('error', 'Username atau password salah!')->withInput();
+        if (!$user) {
+            return back()->with('error', 'Akun belum terdaftar')->withInput();
         }
 
-        session([
-            'admin_id'   => $admin->id,
-            'admin_nama' => $admin->nama,
-            'admin_user' => $admin->username,
-        ]);
+        // Verifikasi password
+        if ($user->password !== md5($password)) {
+            return back()->with('error', 'Username/password salah')->withInput();
+        }
 
-        return redirect()->route('dashboard');
+        // Cek role untuk set session
+        if ($user->role === 'admin') {
+            session([
+                'admin_id'   => $user->id,
+                'admin_nama' => $user->nama,
+                'admin_user' => $user->username,
+            ]);
+            return redirect()->route('dashboard')->with('success', 'Login berhasil! Selamat datang, ' . $user->nama);
+        } elseif ($user->role === 'customer') {
+            session([
+                'customer_id'    => $user->id,
+                'customer_nama'  => $user->nama,
+                'customer_email' => $user->email,
+            ]);
+            return redirect()->route('customer.produk')->with('success', 'Login berhasil! Selamat datang, ' . $user->nama);
+        }
+
+        return back()->with('error', 'Username/password salah')->withInput();
     }
 
     public function logout()

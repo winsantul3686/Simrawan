@@ -8,6 +8,7 @@
         <li><a href="#">Produk</a></li>
         <li><a href="#">Wishlist</a></li>
         <li><a href="#">Riwayat</a></li>
+        <li><a href="#">Profil</a></li>
     </ul>
     <div class="pub-auth">
         <a href="{{ route('login') }}" class="link-login">Login</a>

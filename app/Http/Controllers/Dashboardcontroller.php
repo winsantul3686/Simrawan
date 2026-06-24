@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\StokIkan;
 use App\Models\Transaksi;
-use App\Models\Customer;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
@@ -13,7 +13,7 @@ class DashboardController extends Controller
     {
         $totalPenjualan   = Transaksi::where('status', 'Selesai')->sum('total_harga');
         $jumlahPesanan    = Transaksi::count();
-        $jumlahCustomer   = Customer::count();
+        $jumlahCustomer   = User::where('role', 'customer')->count();
         $totalStok        = StokIkan::sum('jumlah_stok');
 
         $stokTersedia = StokIkan::where('status', 'Tersedia')
@@ -32,7 +32,7 @@ class DashboardController extends Controller
             ->orderBy('bulan')
             ->get();
 
-        return view('layouts.dashboard', compact(
+        return view('halaman_utama', compact(
             'totalPenjualan', 'jumlahPesanan', 'jumlahCustomer',
             'totalStok', 'stokTersedia', 'penjualanBulanan'
         ));

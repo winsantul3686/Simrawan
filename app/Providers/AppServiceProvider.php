@@ -19,6 +19,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        \Illuminate\Support\Facades\Validator::resolver(function ($translator, $data, $rules, $messages, $customAttributes) {
+            $messages['required'] = 'Data tidak boleh kosong.';
+            return new \Illuminate\Validation\Validator($translator, $data, $rules, $messages, $customAttributes);
+        });
     }
 }

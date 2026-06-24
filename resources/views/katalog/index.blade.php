@@ -8,14 +8,14 @@
 
 <div style="margin-bottom:18px;">
     <button class="btn btn-primary" onclick="openModal('modal-tambah')">
-        <i class="fas fa-plus"></i> +Tambah Produk
+        <i class="fas fa-plus"></i> Tambah Produk
     </button>
 </div>
 
 @if($katalogList->isEmpty())
     <div class="card" style="text-align:center;padding:40px;color:var(--text-muted);">
         <i class="fas fa-fish" style="font-size:2rem;margin-bottom:10px;display:block;"></i>
-        Belum ada produk di katalog
+        Belum ada katalog produk
 
     </div>
 @else

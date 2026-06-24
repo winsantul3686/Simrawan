@@ -53,12 +53,22 @@
                 </div>
             </div>
 
-            <div class="form-group">
-                <label>Email</label>
-                <div class="input-icon">
-                    <i class="fas fa-envelope"></i>
-                    <input type="email" name="email" placeholder="nama@email.com"
-                           value="{{ old('email') }}" required>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Username</label>
+                    <div class="input-icon">
+                        <i class="fas fa-user-tag"></i>
+                        <input type="text" name="username" placeholder="username_anda"
+                               value="{{ old('username') }}" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <div class="input-icon">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" name="email" placeholder="nama@email.com"
+                               value="{{ old('email') }}" required>
+                    </div>
                 </div>
             </div>
 

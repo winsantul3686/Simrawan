@@ -35,7 +35,7 @@ class KatalogController extends Controller
             'gambar'       => $gambar,
         ]);
 
-        return redirect()->route('katalog.index')->with('success', 'Produk berhasil ditambahkan!');
+        return redirect()->route('katalog.index')->with('success', 'Katalog produk berhasil ditambahkan!');
     }
 
     public function update(Request $request, $id)
@@ -61,6 +61,6 @@ class KatalogController extends Controller
     public function destroy($id)
     {
         KatalogProduk::findOrFail($id)->delete();
-        return redirect()->route('katalog.index')->with('success', 'Produk berhasil dihapus!');
+        return redirect()->route('katalog.index')->with('success', 'Katalog produk berhasil dihapus!');
     }
 }
